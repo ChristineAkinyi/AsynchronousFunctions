@@ -93,23 +93,23 @@ function unstableTask(taskName, failureProbability) {
     });
 }
 
+
 async function executeWithRetry(taskName, retries, failureProbability) {
-    for (let i = 1; i <= retries; i++) {
-        try {
-          await unstableTask(taskName, failureProbability);
-          console.log(`${taskName} succeeded after ${i} attempt(s)`);
-          return;
-        } catch (error) {
-          console.log(`${taskName} failed on attempt ${i}`);
-          if (i === retries) {
-            console.log(`${taskName} failed after ${i} attempts`);
-          }
-        }
-      }
+    for (let i = 0; i <= retries; i++) {
+    try {
+    const result = await unstableTask(taskName, failureProbability);
+    console.log(result);
+    return; // exit function if task succeeds
+    } catch (error) {
+    console.log(error);
+    if (i === retries) {
+    throw new Error(`Failed after ${retries} retries`);
     }
+    }
+    }
+   }
 
-executeWithRetry("SampleTask", 3, 0.5);
-
+executeWithRetry("reading novel", 3, 0.5);
 
 
 
